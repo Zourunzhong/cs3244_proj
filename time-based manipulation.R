@@ -247,7 +247,7 @@ finaldf <- full_join(updated_srRain, updated_carparkDf, by = "binned_hours") %>%
          TotalSE29 = 333, SE29available = TotalSE29 - mean_hourlySE29,
          date = as.Date(binned_hours, "%Y-%m-%d %H"), weekDay = weekdays(date),
          weekNum = format(date, "%V"), hour = unlist(str_extract_all(binned_hours, "(?<=[:blank:])[0-9]{2}")),
-         workDay = ifelse(weekDay %in% c("Saturday","Sunday"), 1, 0),
+         workDay = ifelse(weekDay %in% c("Saturday","Sunday"), 0, 1),
          workingHour = ifelse(((9 <= hour & hour <= 13)| (14 <= hour & hour <= 17)), 1, 0),
          PH = ifelse(date %in% pHDates, 1, 0)
   ) 
