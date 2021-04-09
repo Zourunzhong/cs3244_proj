@@ -150,9 +150,9 @@ finaldf <- finaldf %>% group_by(weekNum) %>%
   mutate(airtemp = ifelse(is.na(airtemp), weeklyTemp, airtemp), rainfall = ifelse(is.na(rainfall), weeklyrainfall, rainfall),
          humidity = ifelse(is.na(humidity), weeklyHumid, humidity))
 
-
+df <- df %>% arrange(date)
 df <- data.frame(finaldf[1:6], apply(finaldf[7:27], 2, as.integer), finaldf[28:35])
-write.csv(df,"df.csv", row.names = FALSE)
+write.csv(df,"../data/carparkdfs/df_2018.csv", row.names = FALSE)
 
 
 #str_extract_all(updated_carparkDf$binned_hours,"(?<-[:blank:][0-9]{2})")
@@ -163,9 +163,9 @@ write.csv(df,"df.csv", row.names = FALSE)
 # 
 
 
-write.csv(finaldf,"Finaldf.csv", row.names = FALSE)
-View(finaldf)
-table(finaldf$PH)
+# write.csv(finaldf,"Finaldf.csv", row.names = FALSE)
+# View(finaldf)
+# table(finaldf$PH)
 
 
 ################################################################################################################################################################################################################################
@@ -258,9 +258,9 @@ finaldf <- finaldf %>% group_by(weekNum) %>%
   mutate(airtemp = ifelse(is.na(airtemp), weeklyTemp, airtemp), rainfall = ifelse(is.na(rainfall), weeklyrainfall, rainfall),
          humidity = ifelse(is.na(humidity), weeklyHumid, humidity))
 
-
+df <- df %>% arrange(date)
 df <- data.frame(finaldf[1:6], apply(finaldf[7:27], 2, as.integer), finaldf[28:35])
-write.csv(df,"df_2019.csv", row.names = FALSE)
+write.csv(df,"../data/carparkdfs/df_2019.csv", row.names = FALSE)
 
 
 #str_extract_all(updated_carparkDf$binned_hours,"(?<-[:blank:][0-9]{2})")
