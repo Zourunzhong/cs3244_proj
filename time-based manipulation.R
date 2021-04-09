@@ -122,8 +122,10 @@ names(updated_carparkDf) <- names(updated_carparkDf) %>% str_replace_all("[\\(\\
 head(updated_srRain)
 
 #transform column for public holiday
-public_holiday_2018 <- read.csv("public_hoilday_2018.csv", col.names = "dates", colClasses = "Date")
-pHDates <- public_holiday_2018 %>% pull()
+public_holiday <- read.csv("public_holiday.csv")
+public_holiday <- public_holiday %>% mutate(PHDates = as.Date(PHDates, format = "%d/%m/%Y"), PHDates2019 = as.Date(PHDates2019, format = "%d/%m/%Y"))
+PHDates <- public_holiday %>% pull(PHDates)
+PHDates2019 <- public_holiday %>% pull(PHDates2019)
 
 ## Total lots
 total_lots <- c(178, 279, 548, 167, 214, 186, 333)
@@ -141,7 +143,7 @@ finaldf <- full_join(updated_srRain, updated_carparkDf, by = "binned_hours") %>%
          weekNum = format(date, "%V"), hour = unlist(str_extract_all(binned_hours, "(?<=[:blank:])[0-9]{2}")),
          workDay = ifelse(weekDay %in% c("Saturday","Sunday"), 0, 1),
          workingHour = ifelse(((9 <= hour & hour <= 13)| (14 <= hour & hour <= 17)), 1, 0),
-         PH = ifelse(date %in% pHDates, 1, 0)
+         PH = ifelse(date %in% PHDates, 1, 0)
          ) 
 
 finaldf <- finaldf %>% group_by(weekNum) %>%
@@ -229,9 +231,13 @@ names(updated_carparkDf) <- names(updated_carparkDf) %>% str_replace_all("[\\(\\
 ########################################################################################
 head(updated_srRain)
 
-#transform column for public holiday
-public_holiday_2018 <- read.csv("public_hoilday_2018.csv", col.names = "dates", colClasses = "Date")
-pHDates <- public_holiday_2018 %>% pull()
+# transform column for public holiday
+# write.csv(data.frame(PHDates, PHDates2019), "public_holiday.csv", row.names = TRUE)
+public_holiday <- read.csv("public_holiday.csv")
+public_holiday <- public_holiday %>% mutate(PHDates = as.Date(PHDates, format = "%d/%m/%Y"), PHDates2019 = as.Date(PHDates2019, format = "%d/%m/%Y"))
+PHDates <- public_holiday %>% pull(PHDates)
+PHDates2019 <- public_holiday %>% pull(PHDates2019)
+
 
 ## Total lots
 total_lots <- c(178, 279, 548, 167, 214, 186, 333)
@@ -249,7 +255,7 @@ finaldf <- full_join(updated_srRain, updated_carparkDf, by = "binned_hours") %>%
          weekNum = format(date, "%V"), hour = unlist(str_extract_all(binned_hours, "(?<=[:blank:])[0-9]{2}")),
          workDay = ifelse(weekDay %in% c("Saturday","Sunday"), 0, 1),
          workingHour = ifelse(((9 <= hour & hour <= 13)| (14 <= hour & hour <= 17)), 1, 0),
-         PH = ifelse(date %in% pHDates, 1, 0)
+         PH = ifelse(date %in% PHDates2019, 1, 0)
   ) 
 
 finaldf <- finaldf %>% group_by(weekNum) %>%
@@ -275,3 +281,5 @@ write.csv(finaldf,"../data/carparkdfs/df_2019.csv", row.names = FALSE)
 View(finaldf)
 table(finaldf$PH)
 
+totaldf <- rbind(read.csv("../data/carparkdfs/df_2018.csv"),read.csv("../data/carparkdfs/df_2019.csv"))
+write.csv(totaldf, "../data/carparkdfs/df_full.csv", row.names = FALSE)
